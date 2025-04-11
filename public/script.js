@@ -46,18 +46,17 @@ document.addEventListener("DOMContentLoaded", event => {
     //checkWrap(true);
     if(isMobile){
         const header = document.getElementById("siteheader-content");
+
         const drop = document.getElementById("dropdiv");
         
         header.classList.add('no-transition');
         header.style.opacity = "0";
-        
-        // 👇 force reflow so browser applies the no-transition
-        void header.offsetHeight;
-        
-        // 👇 now remove it so future transitions work normally
+        document.getElementById("siteheader-content").style['pointer-events'] = 'none';
+        void header.offsetHeight
         header.classList.remove('no-transition');
         
         drop.style.opacity = "1";
+        ocument.getElementById("wcenteredtext").style.flexDirection = "column";
     }
     else{
         checkWrap(true);
@@ -81,23 +80,23 @@ function checkWrap(onload) {
     if (top1 !== top2) {
         const header = document.getElementById("siteheader-content");
         const drop = document.getElementById("dropdiv");
-        
+        document.getElementById("siteheader-content").style['pointer-events'] = 'none';
         if(onload){header.classList.add('no-transition')};
         header.style.opacity = "0";
-        
-        // 👇 force reflow so browser applies the no-transition
         void header.offsetHeight;
-        
-        // 👇 now remove it so future transitions work normally
         if(onload){header.classList.remove('no-transition')};
-        
         drop.style.opacity = "1";
-        
+        document.getElementById("wcenteredtext").style.flexDirection = "column";
+        // containers = document.querySelectorAll('.c');
+        // containers.forEach(container => { 
+            
+        // });
       
       
     }
     else{
       document.getElementById("siteheader-content").style.opacity = "1";
+      document.getElementById("siteheader-content").style['pointer-events'] = 'auto';
       document.getElementById("dropdiv").style.opacity = "0";
 
     }
