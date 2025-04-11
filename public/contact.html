@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact</title>
+    <link rel="stylesheet" href="style.css">
+
+
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-database-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-functions-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-messaging-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-storage-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-remote-config-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-performance-compat.js"></script>
+
+
+  </head>
+  <body>
+    <header id = "siteheader">
+      <div onclick="transitionToPage('index.html')" id = "siteheader-title"><img id="logoimg" src="images/logo.png"></div>
+      <div id = "siteheader-content">
+        <!-- <span><button class = "bluebutton" id = "loginbutton" onClick = "handleAuth()">
+          Login
+        </button></span> -->
+     
+        <a onclick="transitionToPage('about.html')">About Us</a>
+        <a onclick="transitionToPage('mission.html')">Recent</a>
+        <a onclick="transitionToPage('schedule.html')">Schedule</a>
+        <a onclick="transitionToPage('contact.html')">Contact</a>
+        <!-- <a href = "yourdoom.html">Your Doom</a> -->
+      </div>
+    </header>
+    <script defer src = "script.js"></script>
+  </body>
+</html>

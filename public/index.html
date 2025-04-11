@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chrysalis Project</title>
+    <link rel="stylesheet" href="style.css">
+
+
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-database-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-functions-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-messaging-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-storage-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-remote-config-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-performance-compat.js"></script>
+
+
+
+  </head>
+  <body>
+    <header id = "siteheader">
+      <div onclick="transitionToPage('index.html')" id = "siteheader-title"><img id="logoimg" src="images/logo.png"></div>
+      <div id = "siteheader-content">
+        <!-- <span><button class = "bluebutton" id = "loginbutton" onClick = "handleAuth()">
+          Login
+        </button></span> -->
+       
+        <a onclick="transitionToPage('about.html')">About Us</a>
+        <a onclick="transitionToPage('mission.html')">Mission & Goals</a>
+        <a onclick="transitionToPage('schedule.html')">Schedule</a>
+        <a onclick="transitionToPage('contact.html')">Contact</a>
+        <!-- <a href = "yourdoom.html">Your Doom</a> -->
+      </div>
+      <div id="dropdiv" class="dropdown">
+        
+        <div id="menu-toggle" onclick="toggleMenu()">
+          <div class="bar" id="bar1"></div>
+          <div class="bar" id="bar2"></div>
+          <div class="bar" id="bar3"></div>
+        </div>
+      
+        <div id="dropdown-menu">
+          <a onclick="transitionToPage('about.html')">About Us</a>
+          <a onclick="transitionToPage('mission.html')">Recent</a>
+          <a onclick="transitionToPage('schedule.html')">Schedule</a>
+          <a onclick="transitionToPage('contact.html')">Contact</a>
+        </div>
+ 
+      </div>
+    </header>
+
+    <div class = "centeredtext">
+      <h1>Mission</h1>
+    <p>Chrysalis wants to help kids with autism grow and madhav salaka crocodilo</p>
+    </div>
+    <div class = "centeredtext">
+      <h1>What we do</h1>
+    <p>Wiesel’s repetition of “Never shall I forget” creates a rhythmic, almost incantatory effect, emphasizing the inescapability of his trauma. By describing his life as “one long night,” he suggests that his suffering did not end with that moment but instead became a defining, permanent condition. The phrase “seven times cursed and seven times sealed” alludes to biblical and mystical numerology, reinforcing the idea that his fate is both tragic and unchangeable. Through these literary choices, Wiesel conveys not just his personal devastation but the irreversible spiritual and emotional toll of the Holocaust.</p>
+    <ul>
+      <li>given kids popsicles!</li>
+      <li>crocodilo tralallo</li>
+      <li>alright lets cut to the chase</li>
+      <li>hey google</li>
+      <li>how do i code this website</li>
+    </ul>
+    <p>Chrysalis wants to help kids with autism grow and madhav salaka crocodilo HOTSPOT BROOOOOOO HOTSPOT PLEASE BROOOOOOO ONE MINUTE PLEASE DAD </p>
+    </div>
+
+    <div class = "lessmargin centeredtext"><img alt = "test" src = "images/test.jpg"></div>
+    <div class = "centeredtext">
+      <h1 id ="lead">Leadership!</h1>
+    </div>
+    <div class = "wcenteredtext">
+        <div class = "c">
+          <div class="officer">
+            <h1>EZHILARASU SANKER</h1>
+            <h3>deputy of chrysalis</h3>
+            <div id="floated"><img src = "images/test2.jpg"></div>
+            Wiesel’s repetition of “Never shall I forget” creates a rhythmic, almost incantatory effect, emphasizing the inescapability of his trauma. By describing his life as “one long night,” he suggests that his suffering did not end with that moment but instead became a defining, permanent condition. The phrase “seven times cursed and seven times sealed” alludes to biblical and mystical numerology, reinforcing the idea that his fate is both tragic and unchangeable. Through these literary choices, Wiesel conveys not just his personal devastation but the irreversible spiritual and emotional toll of the Holocaust.
+          </div>
+          <div class="officer">
+            <h1>EZHILARASU SANKER</h1>
+            <h3>vicepresident</h3>
+            <div id="floated"><img src = "images/test2.jpg"></div>
+            vastation but the irreversible spiritual and emotional toll of the Holocaust.
+          </div>
+        </div>
+        <div class = "c">
+          <div class="officer">
+            <h1>Sabrina</h1>
+            <h3>sabrina</h3>
+            <div id="floated"><img src = "images/test2.jpg"></div>
+            Wiesel’s repetition of “Never shall I forget” creates a rhythmic, almost incantatory effect, emphasizing the inescapability of his trauma. By describing his life as “one long night,” he suggests that his suffering did not end with that moment but instead became a defining, permanent condition. The phrase “seven times cursed and seven times sealed” alludes to biblical and mystical numerology, reinforcing the idea that his fate is both tragic and unchangeable. Through these literary choices, Wiesel conveys not just his personal devastation but the irreversible spiritual and emotional toll of the Holocaust.
+          </div>
+          <div class="officer">
+            <h1>madhav</h1>
+            <h3>hello</h3>
+            <div id="floated"><img src = "images/test2.jpg"></div>
+            Wiesel’s repetition of “Never shall I forget” creates a rhythmic, almost incantatory effect, emphasizing the inescapability of his trauma. By describing his life as “one long night,” he suggests that his suffering did not end with that moment but instead became a defining, permanent condition. The phrase “seven times cursed and seven times sealed” alludes to biblical and mystical numerology, reinforcing the idea that his fate is both tragic and unchangeable. Through these literary choices, Wiesel conveys not just his personal devastation but the irreversible spiritual and emotional toll of the Holocaust.
+          </div>
+        </div>
+    </div>
+
+    <script defer src = "script.js"></script>
+  </body>
+</html>
