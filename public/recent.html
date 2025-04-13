@@ -28,13 +28,36 @@
           Login
         </button></span> -->
        
-        <a onclick="transitionToPage('index.html')">About Us</a>
+        <a onclick="transitionToPage('about.html')">About Us</a>
         <a onclick="transitionToPage('recent.html')">Recent</a>
         <a onclick="transitionToPage('schedule.html')">Schedule</a>
         <a onclick="transitionToPage('contact.html')">Contact</a>
+        <a onclick = "handleAuth()" id = "login">Login</a>
         <!-- <a href = "yourdoom.html">Your Doom</a> -->
       </div>
+      <div id="dropdiv" class="dropdown">
+        
+        <div id="menu-toggle" onclick="toggleMenu()">
+          <div class="bar" id="bar1"></div>
+          <div class="bar" id="bar2"></div>
+          <div class="bar" id="bar3"></div>
+        </div>
+      
+        <div id="dropdown-menu">
+          <a onclick="transitionToPage('index.html')">About Us</a>
+          <a onclick="transitionToPage('recent.html')">Recent</a>
+          <a onclick="transitionToPage('schedule.html')">Schedule</a>
+          <a onclick="transitionToPage('contact.html')">Contact</a>
+          <a onclick = "handleAuth()" id = "login">Login</a>
+        </div>
+ 
+      </div>
     </header>
+
+    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DIK9Sl3xvEB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" data-instgrm-version="14">
+    </blockquote>
+    <script async defer src="//www.instagram.com/embed.js"></script>
+    
     <script defer src = "script.js"></script>
   </body>
 </html>

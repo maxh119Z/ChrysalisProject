@@ -22,19 +22,60 @@
   </head>
   <body>
     <header id = "siteheader">
-      <div onclick="transitionToPage('index.html')" id = "siteheader-title"><img id="logoimg" src="images/logo.png"></div>
-      <div id = "siteheader-content">
-        <!-- <span><button class = "bluebutton" id = "loginbutton" onClick = "handleAuth()">
-          Login
-        </button></span> -->
-     
-        <a onclick="transitionToPage('about.html')">About Us</a>
-        <a onclick="transitionToPage('mission.html')">Recent</a>
-        <a onclick="transitionToPage('schedule.html')">Schedule</a>
-        <a onclick="transitionToPage('contact.html')">Contact</a>
-        <!-- <a href = "yourdoom.html">Your Doom</a> -->
-      </div>
-    </header>
+        <div onclick="transitionToPage('index.html')" id = "siteheader-title"><img id="logoimg" src="images/logo.png"></div>
+        <div id = "siteheader-content">
+          <!-- <span><button class = "bluebutton" id = "loginbutton" onClick = "handleAuth()">
+            Login
+          </button></span> -->
+         
+          <a onclick="transitionToPage('about.html')">About Us</a>
+          <a onclick="transitionToPage('recent.html')">Recent</a>
+          <a onclick="transitionToPage('schedule.html')">Schedule</a>
+          <a onclick="transitionToPage('contact.html')">Contact</a>
+          <a onclick = "handleAuth()" id = "login">Login</a>
+          <!-- <a href = "yourdoom.html">Your Doom</a> -->
+        </div>
+        <div id="dropdiv" class="dropdown">
+          
+          <div id="menu-toggle" onclick="toggleMenu()">
+            <div class="bar" id="bar1"></div>
+            <div class="bar" id="bar2"></div>
+            <div class="bar" id="bar3"></div>
+          </div>
+        
+          <div id="dropdown-menu">
+            <a onclick="transitionToPage('index.html')">About Us</a>
+            <a onclick="transitionToPage('recent.html')">Recent</a>
+            <a onclick="transitionToPage('schedule.html')">Schedule</a>
+            <a onclick="transitionToPage('contact.html')">Contact</a>
+            <a onclick = "handleAuth()" id = "login">Login</a>
+          </div>
+   
+        </div>
+      </header>
+
+    <section class="contact-section">
+        <h1>Contact Form</h1>
+        <form id="myform">
+            <input id = "nameform" name="name" placeholder="Name" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <textarea name="message" placeholder="Message"></textarea>
+            <button type="submit">Send</button>
+          </form>
+          
+          
+      </section>
+      
+      
+        
+
+    <footer>
+        <div class = "divfooter">
+        <h3>Follow us on Instagram! <a href = "https://www.instagram.com/thechrysalis.project/">https://www.instagram.com/thechrysalis.project/</a></h3>
+        <p>Site by Max Zhang</p>
+        </div>
+        
+    </footer>
     <script defer src = "script.js"></script>
   </body>
 </html>

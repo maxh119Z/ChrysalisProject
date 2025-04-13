@@ -2,11 +2,15 @@ const firebaseConfig = {
     apiKey: "AIzaSyBc9BlHHYH80QFIS9ziJQ3fgLCnMEWiZGY",
     authDomain: "chrysalis-5f39e.firebaseapp.com",
     projectId: "chrysalis-5f39e",
-    storageBucket: "chrysalis-5f39e.firebasestorage.app",
+    storageBucket: "chrysalis-5f39e.appspot.com",
     messagingSenderId: "493208059674",
     appId: "1:493208059674:web:148fa9901d9e4ea9e876a3",
     measurementId: "G-R16ZB2LTV7"
 };
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 var isMobile = {
     Android: function() {
@@ -36,15 +40,14 @@ window.transitionToPage = function(href, id) {
     }, 200);
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+
 
 document.addEventListener("DOMContentLoaded", event => {
     const app = firebase.app();
     document.querySelector('body').style.opacity = 1;
-    //checkWrap(true);
-    if(isMobile){
+    checkWrap(true);
+    if(isMobile.any() || window.self != window.top){
+
         const header = document.getElementById("siteheader-content");
 
         const drop = document.getElementById("dropdiv");
@@ -56,11 +59,12 @@ document.addEventListener("DOMContentLoaded", event => {
         header.classList.remove('no-transition');
         
         drop.style.opacity = "1";
-        ocument.getElementById("wcenteredtext").style.flexDirection = "column";
+        if (window.location.href == "index.html"){
+            document.getElementById("wcenteredtext").style.flexDirection = "column";
+        }
+        
     }
-    else{
-        checkWrap(true);
-    }
+    
     
 });
 
@@ -68,6 +72,59 @@ window.addEventListener("resize", function(){
     console.log("hi");
     checkWrap(false);
 });
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => console.log("Auth state persistence set to LOCAL."))
+    .catch(error => console.error("Error setting persistence:", error));
+
+auth.onAuthStateChanged(user => {
+    console.log("Auth state changed:", user);
+    updateUI(user);
+
+});
+
+function handleAuth() {
+    const user = auth.currentUser;
+
+    if (user) {
+        auth.signOut().then(() => {
+            console.log("User logged out.");
+           
+        }).catch(error => console.error("Logout Error:", error));
+    } else {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+            .then(result => {
+                console.log("User signed in:", result.user);
+                saveUserToFirestore(result.user);
+            })
+            .catch(error => alert(`Error: ${error.message}`));
+    }
+}
+
+function saveUserToFirestore(user) {
+   
+    const userRef = db.collection("users").doc(user.uid);
+
+    userRef.set({
+        email: user.email,
+        name: user.displayName
+    }, { merge: true }) 
+
+}
+
+function updateUI(user) {
+    const loginButton = document.getElementById("login");
+    if (user) {
+        loginButton.innerHTML = "Logout";
+        
+    } else {
+        loginButton.innerHTML = "Login";
+       
+    }
+    
+
+}
 
 function checkWrap(onload) {
     const el = document.getElementById('siteheader-content');
@@ -86,7 +143,10 @@ function checkWrap(onload) {
         void header.offsetHeight;
         if(onload){header.classList.remove('no-transition')};
         drop.style.opacity = "1";
-        document.getElementById("wcenteredtext").style.flexDirection = "column";
+        if (window.location.href == "index.html"){
+            document.getElementById("wcenteredtext").style.flexDirection = "column";
+        }
+       
         // containers = document.querySelectorAll('.c');
         // containers.forEach(container => { 
             
@@ -98,6 +158,10 @@ function checkWrap(onload) {
       document.getElementById("siteheader-content").style.opacity = "1";
       document.getElementById("siteheader-content").style['pointer-events'] = 'auto';
       document.getElementById("dropdiv").style.opacity = "0";
+      if (window.location.href == "index.html"){
+        document.getElementById("wcenteredtext").style.flexDirection = "row";
+      }
+      
 
     }
   }
@@ -115,3 +179,51 @@ function checkWrap(onload) {
     }
   }
   
+
+  document.getElementById("myform").addEventListener("submit", function (e) {
+    const user = auth.currentUser;
+    if (user){
+        e.preventDefault(); // prevent page reload
+
+    const form = e.target;
+    const formData = new URLSearchParams();
+    formData.append("name", form.name.value);
+    formData.append("email", form.email.value);
+    formData.append("message", form.message.value);
+    formData.append("remail", user.email);
+    formData.append("rname", user.displayName);
+
+    console.log([...formData.entries()]);
+
+    fetch("https://script.google.com/macros/s/AKfycbz9704M7IVi_voY9tb2iwNHkRcr7-eMkTV6_jeVSAK2Low3Bx-IbWMiqnByzKqQkB9j/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: formData.toString(),
+  
+    })
+    .then(() => {
+      // Clear form fields after successful submission
+      form.reset();
+      // Optional: Show a quick message
+      console.log("Form submitted successfully");
+    })
+    .catch(error => {
+      console.error("Form submission error:", error);
+    });
+    }
+    else{
+        e.preventDefault();
+        const input = document.getElementById("nameform");
+
+        input.value = "Please login to ensure you are a real person.";
+        input.classList.add("shakeit");
+      
+        // Remove the shake class after 0.5s so it can be triggered again
+        setTimeout(() => {
+          input.classList.remove("shakeit");
+        }, 500);
+    }
+    
+  });
