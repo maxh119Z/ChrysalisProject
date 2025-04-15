@@ -67,16 +67,21 @@ document.addEventListener("DOMContentLoaded", event => {
         header.classList.remove('no-transition');
         
         drop.style.opacity = "1";
-        if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "index.html"){
-            document.getElementById("wcenteredtext").style.flexDirection = "column";
+       
+        const path = window.location.pathname;
+
+  
+        if (path === "/" || path === "/index.html") {
+          document.getElementById("wcenteredtext").style.flexDirection = "column";
         }
-        
+        updateUI(auth.currentUser);
     }
 
     if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "schedule.html"){
  
         createCalendar();
     }
+    
     
 });
 
@@ -89,11 +94,37 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(() => console.log("Auth state persistence set to LOCAL."))
     .catch(error => console.error("Error setting persistence:", error));
 
-auth.onAuthStateChanged(user => {
-    console.log("Auth state changed:", user);
-    updateUI(user);
+  auth.onAuthStateChanged(user => {
+      console.log("Auth state changed:", user);
+      updateUI(user);
+  
+      const containers = document.querySelectorAll('.adminonly');
+  
+      if (!user) {
+      
+          containers.forEach(container => {
+              container.style.display = 'none';
+          });
+          return; 
+      }
+  
+      const userEmail = user.email;
+      db.collection("admin").doc(userEmail).get()
+      .then(docSnapshot => {
+          const isAdmin = docSnapshot.exists;
 
-});
+          containers.forEach(container => {
+              container.style.display = isAdmin ? '' : 'none';
+          });
+      })
+      .catch(error => {
+          console.error("Error checking admin status:", error);
+          containers.forEach(container => {
+              container.style.display = 'none';
+          });
+      });
+  });
+  
 
 function handleAuth() {
     const user = auth.currentUser;
@@ -109,6 +140,11 @@ function handleAuth() {
             .then(result => {
                 console.log("User signed in:", result.user);
                 saveUserToFirestore(result.user);
+                if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "schedule.html"){
+ 
+                  location.reload();
+                }
+                
             })
             .catch(error => alert(`Error: ${error.message}`));
     }
@@ -126,14 +162,19 @@ function saveUserToFirestore(user) {
 }
 
 function updateUI(user) {
-    const loginButton = document.getElementById("login");
+    // containers = document.querySelectorAll('.c');
+        // containers.forEach(container => { 
+            
+        // });
+    loginButtons = document.querySelectorAll('.login');
     if (user) {
-        loginButton.innerHTML = "Logout";
+        loginButtons.forEach(buttons=>{buttons.innerHTML = "Logout"})
         
     } else {
-        loginButton.innerHTML = "Login";
+      loginButtons.forEach(buttons=>{buttons.innerHTML = "Login"})
        
     }
+    
     
 
 }
@@ -150,13 +191,17 @@ function checkWrap(onload) {
         const header = document.getElementById("siteheader-content");
         const drop = document.getElementById("dropdiv");
         document.getElementById("siteheader-content").style['pointer-events'] = 'none';
+        document.getElementById("dropdiv").style['pointer-events'] = 'auto';
         if(onload){header.classList.add('no-transition')};
         header.style.opacity = "0";
         void header.offsetHeight;
         if(onload){header.classList.remove('no-transition')};
         drop.style.opacity = "1";
-        if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "index.html"){
-            document.getElementById("wcenteredtext").style.flexDirection = "column";
+        const path = window.location.pathname;
+
+  
+        if (path === "/" || path === "/index.html") {
+          document.getElementById("wcenteredtext").style.flexDirection = "column";
         }
        
         // containers = document.querySelectorAll('.c');
@@ -169,6 +214,7 @@ function checkWrap(onload) {
     else{
       document.getElementById("siteheader-content").style.opacity = "1";
       document.getElementById("siteheader-content").style['pointer-events'] = 'auto';
+      document.getElementById("dropdiv").style['pointer-events'] = 'none';
       document.getElementById("dropdiv").style.opacity = "0";
       if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "index.html"){
         document.getElementById("wcenteredtext").style.flexDirection = "row";
@@ -273,31 +319,52 @@ function createCalendar() {
           //avaliablebutton(dayDiv, currentMonthIndex+1, day, year);
       }
       if (year == currentYear && currentMonthIndex+1 == currentMonth2 && day == currentDay) {
-        dayDiv.style.backgroundColor = "lightblue";
+        dayDiv.style.backgroundColor = "rgb(230, 230, 250)";
       }
     
   }
-    const userTasksRef = db.collection("events");
+  const userTasksRef = db.collection("events");
 
-    let promises = [userTasksRef.get()];
-
-    Promise.all(promises)
-    .then(([snapshot]) => {
-        snapshot.forEach(doc => {
-        const data = doc.data();
-        const title = data.title;
-        const date = doc.id;
-        const location = data.location;
-        const descriptions = data.descriptions;
-
-        console.log(`${title} ${date} ${location} ${descriptions}`);
-        addEvent2(title, date, location, descriptions);
-        });
+  userTasksRef.get()
+    .then(snapshot => {
+      const fetchSubcollections = [];
+  
+      if (snapshot.empty) {
+        console.log("No documents found in 'events' collection.");
+      }
+      snapshot.forEach(doc => {
+     
+        const eventDate = doc.id;
+  
+        const subRef = db.collection("events")
+                         .doc(eventDate)
+                         .collection("eventsthatday");
+  
+        fetchSubcollections.push(
+          subRef.get().then(subSnap => {
+           
+  
+            subSnap.forEach(eventDoc => {
+              const data = eventDoc.data();
+              const title = data.title;
+              const location = data.location;
+              const description = data.description;
+  
+              const docId = eventDoc.id;
+              console.log(docId);  
+             addEvent2(title, eventDate, location, description, docId);
+             
+            });
+          })
+        );
+      });
+  
+      return Promise.all(fetchSubcollections);
     })
     .catch(error => {
-        console.error("Error fetching tasks:", error);
+      console.error("Error fetching tasks:", error);
     });
-
+  
  
 }
 
@@ -344,15 +411,16 @@ document.body.addEventListener('click', function (event) {
     //   infobar = true;
     //   closeEventDetails2();
     // }
-    // if (!event.target.closest('.event-details-panel2') && editbar == false){
-    //   editbar = true;
-    //   closeeditdet();
-    // }
+    if (!event.target.closest('.event-details-panel2') && editbar == false){
+      editbar = true;
+      document.getElementById('editDetails').classList.remove("show-panel2");
+    }
 
     
   });
 
-  function addEvent2(eventTitle, eventDate, eventplace,eventDescription){
+  function addEvent2(eventTitle, eventDate, eventplace,eventDescription, docId){
+    //alert("hi");
     var year = parseInt(eventDate.split('-')[0],10);
     var month = parseInt(eventDate.split('-')[1],10);
     var day = parseInt(eventDate.split('-')[2],10);
@@ -381,7 +449,7 @@ document.body.addEventListener('click', function (event) {
         }
         eventElement.addEventListener('click', function () {
             
-            showEventDetails(eventTitle, eventDate, eventplace, eventDescription);
+            showEventDetails(eventTitle, eventDate, eventplace, eventDescription, docId);
         });
         dayDiv.appendChild(eventElement);
 
@@ -402,13 +470,26 @@ document.body.addEventListener('click', function (event) {
     var month = parseInt(eventDate.split('-')[1],10);
     var day = parseInt(eventDate.split('-')[2],10);
     const user = auth.currentUser;
-    const userRef = db.collection("events").doc(eventDate);
+    const eventRef = db.collection("events").doc(eventDate);
 
-    userRef.set({
-        descriptions: eventDescription,
+    let docId;
+    eventRef.set({}, { merge: true }).then(() => {
+      eventRef.collection("eventsthatday").add({
+        title: eventTitle,
         location: eventplace,
-        title: eventTitle
-    }, { merge: true })
+        description: eventDescription,
+      })
+      .then((docRef) => {
+        docId = docRef.id;
+        console.log(docId);
+        console.log("Event saved successfully!");
+       
+      })
+      .catch((error) => {
+        console.error("Error saving event:", error.message);
+        
+      });
+    });
 
     let red = false;
     if (year < currentYear) {
@@ -434,7 +515,7 @@ document.body.addEventListener('click', function (event) {
           eventElement.style.color = "black";
         }
         eventElement.addEventListener('click', function () {
-            showEventDetails(eventTitle, eventDate, eventplace, eventDescription);
+            showEventDetails(eventTitle, eventDate, eventplace, eventDescription, docId);
         });
         dayDiv.appendChild(eventElement);
 
@@ -446,13 +527,85 @@ document.body.addEventListener('click', function (event) {
     document.getElementById('eventDate').value = "";
 }
 
-function showEventDetails(title, date, place, description) {
+function addEvent3(eventTitle, eventDate, eventPlace, eventDescription) {
+
+  const user = auth.currentUser;
+  const eventRef = db.collection("events").doc(eventDate);
+
+  eventRef.set({}, { merge: true }).then(() => {
+    eventRef.collection("eventsthatday").add({
+      title: eventTitle,
+      location: eventPlace,
+      description: eventDescription,
+    })
+    .then(() => {
+
+      //console.log(docId);
+      console.log("Event saved successfully!");
+      location.reload();
+     
+    })
+    .catch((error) => {
+      console.error("Error saving event:", error.message);
+      
+    });
+  });
+
+  
+}
+
+async function saveEvent(title, date, place, description) {
+  const oldDate = document.getElementById('eventDateDisplay').textContent.trim(); // or `.value` if it's an <input>
+  const docId = document.getElementById('eventDetailsPanel').ID;
+  console.log(document.getElementById('eventDetailsPanel').ID)
+  const todayDocRef = db.collection("events").doc(oldDate).collection("eventsthatday").doc(docId);
+
+  try {
+    // If you meant to delete the whole document:
+    await todayDocRef.delete();
+    console.log(`Event with ID "${docId}" deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting event:", error);
+  }
+
+  // Get new input values
+  const titleEl = document.getElementById('editTitle').value;
+  const dateEl = document.getElementById('editDate').value;
+  const placeEl = document.getElementById('editLocation').value;
+  const descEl = document.getElementById('editDescription').value;
+
+  // Add updated event (or however you're handling new data)
+  addEvent3(titleEl, dateEl, placeEl, descEl);
+  
+}
+async function deleteevent() {
+  const oldDate = document.getElementById('eventDateDisplay').textContent.trim(); // or `.value` if it's an <input>
+  const docId = document.getElementById('eventDetailsPanel').ID;
+  console.log(document.getElementById('eventDetailsPanel').ID)
+  const todayDocRef = db.collection("events").doc(oldDate).collection("eventsthatday").doc(docId);
+
+  try {
+    await todayDocRef.delete();
+    location.reload();
+    console.log(`Event with ID "${docId}" deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting event:", error);
+  }
+
+  
+}
+
+
+function showEventDetails(title, date, place, description, docId) {
     //("Title display element:", document.getElementById('eventTitleDisplay'));
 
     const titleEl = document.getElementById('eventTitleDisplay');
     const dateEl = document.getElementById('eventDateDisplay');
     const placeEl = document.getElementById('eventPlaceDisplay');
     const descEl = document.getElementById('eventDescriptionDisplay');
+    var panel = document.getElementById('eventDetailsPanel');
+    panel.ID = docId;
+    console.log(panel.ID);
 
     if (titleEl && dateEl && placeEl && descEl) {
         titleEl.innerHTML = title;
@@ -463,7 +616,7 @@ function showEventDetails(title, date, place, description) {
         alert("One or more event display elements not found.");
     }
 
-    const panel = document.getElementById('eventDetailsPanel');
+    //const panel = document.getElementById('eventDetailsPanel');
     if (panel) {
         panel.classList.add('show-panel');
         setTimeout(() => { eventdet = false }, 450);
@@ -473,4 +626,18 @@ function showEventDetails(title, date, place, description) {
 function closeEventDetails() {
     const panel = document.getElementById('eventDetailsPanel');
     panel.classList.remove('show-panel');
+  }
+
+  function editevent(){
+    //open edit tnhing
+    if (document.getElementById('editDetails').classList.contains("show-panel2")){
+        document.getElementById('editDetails').classList.remove("show-panel2");
+      editbar = true;
+    }
+    else{
+        document.getElementById('editDetails').classList.add("show-panel2");
+        console.log(document.getElementById('eventDetailsPanel').ID)
+      setTimeout(function(){editbar=false},450);
+    }
+    
   }
