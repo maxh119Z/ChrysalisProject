@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chrysalis Project</title>
     <link rel="stylesheet" href="style.css">
-
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-dQdR0f1C1lEVfLbg5I5K..."
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  
 
     <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/11.2.0/firebase-auth-compat.js"></script>
@@ -29,7 +36,7 @@
           Login
         </button></span> -->
        
-        <a onclick="transitionToPage('about.html')">About Us</a>
+        <a onclick="transitionToPage('index.html')">About Us</a>
         <a onclick="transitionToPage('recent.html')">Recent</a>
         <a onclick="transitionToPage('schedule.html')">Schedule</a>
         <a onclick="transitionToPage('contact.html')">Contact</a>
@@ -107,13 +114,75 @@
         </div>
     </div>
 
-    <footer>
-      <div class = "divfooter">
-        <h3><a href = "https://www.instagram.com/thechrysalis.project/">Follow us On Instagram!</a></h3>
-        <p>Site by Max Zhang</p>
+    <section id="meeting-section">
+      <div id="meeting-container">
+        <!-- Left Column -->
+        <div id="meeting-info">
+          <h1 id="meeting-heading">Interested? Reach Out!</h1>
+          <p id="meeting-description">
+            Type in your email and message and it will be automatically emailed to our Chrysalis Team, Madhav and Lauren for reading.
+          </p>
+          <ul id="meeting-benefits">
+            <li><i class="fa fa-check"></i> Please email if contains links</li>
+            <li><i class="fa fa-check"></i> Do not spam emails!</li>
+            <li><i class="fa fa-check"></i> Please keep messages concise</li>
+          </ul>
+        </div>
+    
+       
+        <div id="meeting-form-wrapper">
+          <section id="contact-section">
+            <h1>Contact Form</h1>
+            <form id="myform">
+              <input id="nameform" name="name" placeholder="Name" required />
+              <input name="email" type="email" placeholder="Email" required />
+              <textarea name="message" placeholder="Message"></textarea>
+              <button type="submit">Send</button>
+            </form>
+          </section>
+        </div>
       </div>
-      
+    </section>
+    
+    
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>Chrysalis Project</h3>
+          <p>help kids with autism grow and madhav salaka crocodilo</p>
+        </div>
+    
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a onclick="transitionToPage('index.html')">About Us</a></li>
+            <li><a onclick="transitionToPage('recent.html')">Our Projects</a></li>
+            <li><a onclick="transitionToPage('contact.html')">Volunteer</a></li>
+            <li><a onclick="transitionToPage('schedule.html')">Schedule</a></li>
+          </ul>
+        </div>
+    
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <p>Email: madhav.salaka@gmail.com</p>
+          <p>Email2: laurenhlin41@gmail.com</p>
+        </div>
+    
+        <div class="footer-section">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/thechrysalis.project/"><i class="fab fa-instagram"></i></a>
+            <a href="https://github.com/maxh119Z"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    
+      <div class="footer-bottom">
+        <p>&copy; 2025 Chrysalis Project - Site by Max Zhang</p>
+      </div>
     </footer>
+    
 
     <script defer src = "script.js"></script>
   </body>

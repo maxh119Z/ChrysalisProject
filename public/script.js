@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", event => {
         createCalendar();
     }
     
+    renderEventColumns();
     
 });
 
@@ -171,6 +172,7 @@ function updateUI(user) {
         loginButtons.forEach(buttons=>{buttons.innerHTML = "Logout"})
         
     } else {
+   
       loginButtons.forEach(buttons=>{buttons.innerHTML = "Login"})
        
     }
@@ -641,3 +643,95 @@ function closeEventDetails() {
     }
     
   }
+
+  function renderEventColumns() {
+    console.log("rendering");
+    const container = document.querySelector('.event-list');
+    const userTasksRef = db.collection("events");
+  
+    userTasksRef.get()
+      .then(snapshot => {
+        const fetchSubcollections = [];
+  
+        if (snapshot.empty) {
+          console.log("No documents found in 'events' collection.");
+          return;
+        }
+  
+        let i = 0;
+        snapshot.forEach(doc => {
+          const eventDate = doc.id;
+          const year = eventDate.split('-')[0];
+  
+          // Ensure year header + columns exist
+          let column1 = document.getElementById(`column1-${year}`);
+          let column2 = document.getElementById(`column2-${year}`);
+  
+          if (!document.querySelector('.year-' + year)) {
+            // Create title
+            const title = document.createElement('h1');
+            title.className = 'title year-' + year;
+            title.textContent = `${year} Events`;
+            container.appendChild(title);
+  
+            // Create two columns
+            column1 = document.createElement('div');
+            column1.className = 'event-column';
+            column1.id = `column1-${year}`;
+  
+            column2 = document.createElement('div');
+            column2.className = 'event-column';
+            column2.id = `column2-${year}`;
+  
+            let hello = document.createElement('div');
+            hello.className='hello';
+            hello.appendChild(column1);
+            hello.appendChild(column2);
+            container.appendChild(hello);
+           
+          }
+  
+          const subRef = db.collection("events").doc(eventDate).collection("eventsthatday");
+  
+          fetchSubcollections.push(
+            
+            subRef.get().then(subSnap => {
+              
+              subSnap.forEach(eventDoc => {
+                const data = eventDoc.data();
+                const p = document.createElement('p');
+                p.textContent = `${eventDate} — ${data.title || 'Untitled Event'}, ${data.location || 'Location not provided'}`;
+  
+  
+                const col1 = document.getElementById(`column1-${year}`);
+                const col2 = document.getElementById(`column2-${year}`);
+  
+                if (col1 && col2) {
+                  if (i % 2 == 0) {
+                    col1.appendChild(p);
+                  } 
+                  if(i % 2==1) {
+                   
+                    col2.appendChild(p);
+                  }
+                } else {
+                  console.warn(`Could not find columns for year ${year}`);
+                }
+                i++;
+              });
+            })
+          );
+        });
+  
+        return Promise.all(fetchSubcollections);
+      })
+      .catch(error => {
+        console.error("Error fetching tasks:", error);
+      });
+  }
+  
+  
+  
+        
+    
+  
