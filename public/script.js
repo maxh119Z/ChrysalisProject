@@ -172,7 +172,7 @@ function updateUI(user) {
         loginButtons.forEach(buttons=>{buttons.innerHTML = "Logout"})
         
     } else {
-   
+      
       loginButtons.forEach(buttons=>{buttons.innerHTML = "Login"})
        
     }
@@ -225,19 +225,20 @@ function checkWrap(onload) {
 
     }
   }
-
-  function toggleMenu() {
+  document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById("menu-toggle");
     const menu = document.getElementById("dropdown-menu");
-  
-    toggle.classList.toggle("open");
-  
-    if (menu.style.display === "flex") {
-      menu.style.display = "none";
-    } else {
-      menu.style.display = "flex";
-    }
-  }
+
+    toggle.addEventListener("click", () => {
+      toggle.classList.toggle("open");
+
+      if (menu.style.display === "flex") {
+        menu.style.display = "none";
+      } else {
+        menu.style.display = "flex";
+      }
+    });
+  });
   
 if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "contact.html"){
     document.getElementById("myform").addEventListener("submit", function (e) {
@@ -351,10 +352,12 @@ function createCalendar() {
               const title = data.title;
               const location = data.location;
               const description = data.description;
+              const link = data.link;
+              //alert(link);
   
               const docId = eventDoc.id;
               console.log(docId);  
-             addEvent2(title, eventDate, location, description, docId);
+             addEvent2(title, eventDate, location, description, link, docId);
              
             });
           })
@@ -421,7 +424,7 @@ document.body.addEventListener('click', function (event) {
     
   });
 
-  function addEvent2(eventTitle, eventDate, eventplace,eventDescription, docId){
+  function addEvent2(eventTitle, eventDate, eventplace,eventDescription, eventLink, docId){
     //alert("hi");
     var year = parseInt(eventDate.split('-')[0],10);
     var month = parseInt(eventDate.split('-')[1],10);
@@ -451,7 +454,7 @@ document.body.addEventListener('click', function (event) {
         }
         eventElement.addEventListener('click', function () {
             
-            showEventDetails(eventTitle, eventDate, eventplace, eventDescription, docId);
+            showEventDetails(eventTitle, eventDate, eventplace, eventDescription, eventLink, docId);
         });
         dayDiv.appendChild(eventElement);
 
@@ -467,6 +470,7 @@ document.body.addEventListener('click', function (event) {
     const eventDate = document.getElementById('eventDate').value;
     const eventplace = document.getElementById('eventLocation').value;
     const eventDescription = document.getElementById('eventDescription').value;
+    const eventLink = document.getElementById("eventLink").value;
 
     var year = parseInt(eventDate.split('-')[0],10);
     var month = parseInt(eventDate.split('-')[1],10);
@@ -480,6 +484,7 @@ document.body.addEventListener('click', function (event) {
         title: eventTitle,
         location: eventplace,
         description: eventDescription,
+        link: eventLink
       })
       .then((docRef) => {
         docId = docRef.id;
@@ -517,7 +522,7 @@ document.body.addEventListener('click', function (event) {
           eventElement.style.color = "black";
         }
         eventElement.addEventListener('click', function () {
-            showEventDetails(eventTitle, eventDate, eventplace, eventDescription, docId);
+            showEventDetails(eventTitle, eventDate, eventplace, eventDescription, eventLink, docId);
         });
         dayDiv.appendChild(eventElement);
 
@@ -527,9 +532,10 @@ document.body.addEventListener('click', function (event) {
 
     document.getElementById('eventTitle').value = "";
     document.getElementById('eventDate').value = "";
+    document.getElementById('eventLink').value="";
 }
 
-function addEvent3(eventTitle, eventDate, eventPlace, eventDescription) {
+function addEvent3(eventTitle, eventDate, eventPlace, eventDescription, eventLink) {
 
   const user = auth.currentUser;
   const eventRef = db.collection("events").doc(eventDate);
@@ -539,6 +545,7 @@ function addEvent3(eventTitle, eventDate, eventPlace, eventDescription) {
       title: eventTitle,
       location: eventPlace,
       description: eventDescription,
+      link: eventLink
     })
     .then(() => {
 
@@ -575,9 +582,11 @@ async function saveEvent(title, date, place, description) {
   const dateEl = document.getElementById('editDate').value;
   const placeEl = document.getElementById('editLocation').value;
   const descEl = document.getElementById('editDescription').value;
+  const linkEl = document.getElementById('editLink').value;
+
 
   // Add updated event (or however you're handling new data)
-  addEvent3(titleEl, dateEl, placeEl, descEl);
+  addEvent3(titleEl, dateEl, placeEl, descEl, linkEl);
   
 }
 async function deleteevent() {
@@ -598,22 +607,30 @@ async function deleteevent() {
 }
 
 
-function showEventDetails(title, date, place, description, docId) {
+function showEventDetails(title, date, place, description, link, docId) {
     //("Title display element:", document.getElementById('eventTitleDisplay'));
 
     const titleEl = document.getElementById('eventTitleDisplay');
     const dateEl = document.getElementById('eventDateDisplay');
     const placeEl = document.getElementById('eventPlaceDisplay');
     const descEl = document.getElementById('eventDescriptionDisplay');
+    const linkEl = document.getElementById('eventLinkDisplay')
     var panel = document.getElementById('eventDetailsPanel');
     panel.ID = docId;
     console.log(panel.ID);
 
+    
     if (titleEl && dateEl && placeEl && descEl) {
         titleEl.innerHTML = title;
         dateEl.innerHTML = date;
         placeEl.innerHTML = "Location: " +place;
         descEl.innerHTML = "Info: " + description;
+        if (!link.startsWith("http")) {
+          link = "https://" + link;
+      }
+      linkEl.href = link;
+      //alert(linkEl.href);
+      
     } else {
         alert("One or more event display elements not found.");
     }

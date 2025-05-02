@@ -65,7 +65,7 @@
         <div class="calendar-container">
             <div class="calendar-header">
                 <div class="header-left">
-                    <h2>Event Calendar</h2>
+                    <h2 id = "Calendar">Event Calendar</h2>
                     <button id="createeventbutton" class="dropbtn adminonly" onclick="createEvent1()">Create Event</button>
                     <div id="myDropdown" class="dropdown-content">
                       <span id = "crev">CREATE AN EVENT</span>
@@ -75,6 +75,9 @@
                       </div></span>
                       <span><div class="event-form">
                           <input type="text" id="eventLocation" placeholder="Event Location"/>
+                      </div></span>
+                      <span><div class="event-form">
+                        <input type="text" id="eventLink" placeholder="Link to Location"/>
                       </div></span>
                       <span id = "lastform"><div  class="event-form">
                           <input type="text" id="eventDescription" placeholder="Event Description"/>
@@ -100,6 +103,8 @@
         <h2 id="eventDateDisplay">Event Date</h2>
         <h2 id="eventPlaceDisplay">Event Place</h2>
         <h2 id="eventDescriptionDisplay">Event Description</h2>
+        <a id="eventLinkDisplay" href = "">Navigation Link</a>
+
 
         <div class="button-container">
             <button id="editevent" class="adminonly" onclick="editevent()">Edit</button>
@@ -116,6 +121,9 @@
         <span id = "lastform"><div  class="event-form">
             <input type="text" id="editDescription" placeholder="Event Description"/>
         </div></span>
+        <span id = "lastform"><div  class="event-form">
+          <input type="text" id="editLink" placeholder="Navigation Link"/>
+      </div></span>
 
         <div class="button-container">
             <button id="editevent" class="adminonly" onclick="saveEvent()">Edit</button>
