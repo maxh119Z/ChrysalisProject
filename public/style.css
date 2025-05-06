@@ -49,6 +49,17 @@ ul{
   justify-content: center;
   align-items: center;
 }
+.centered1text{
+  width:83%;
+  padding:20px;
+  margin:0 auto;
+  display:flex;
+  gap:30px;
+  margin-bottom:30px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .wcenteredtext{
   width:73%;
   margin:0 auto;
@@ -60,6 +71,8 @@ ul{
   justify-content: center;
   align-items: flex-start;
 }
+
+
 .officer{
   width:100%;
   text-align: left;
@@ -251,16 +264,21 @@ ul{
   
 
   #dropdown-menu {
-    display: none;
+    display: none; /* Initially hidden by default */
+    /* Add other styles like flex-direction, position, background etc. here */
     flex-direction: column;
-    position: relative;
+    position: relative; /* Or absolute depending on layout */
     top: 20px;
     right: 0;
     background-color: white;
     padding: 10px 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-  }
+}
+
+#dropdown-menu.is-visible {
+    display: flex; /* Show when the class is present */
+}
 
   #dropdown-menu a{
     transition-duration: 0.2s;

@@ -50,41 +50,70 @@ window.transitionToPage = function(href, id) {
 
 
 
-document.addEventListener("DOMContentLoaded", event => {
-    const app = firebase.app();
-    document.querySelector('body').style.opacity = 1;
-    checkWrap(true);
-    if(isMobile.any() || window.self != window.top){
+document.addEventListener('DOMContentLoaded', function() {
 
-        const header = document.getElementById("siteheader-content");
+  const app = firebase.app(); 
+  document.querySelector('body').style.opacity = 1;
 
-        const drop = document.getElementById("dropdiv");
-        
-        header.classList.add('no-transition');
-        header.style.opacity = "0";
-        document.getElementById("siteheader-content").style['pointer-events'] = 'none';
-        void header.offsetHeight
-        header.classList.remove('no-transition');
-        
-        drop.style.opacity = "1";
-       
-        const path = window.location.pathname;
+  checkWrap(true); 
+
+  if (isMobile.any() || window.self != window.top) {
+      console.log("Mobile or embedded context detected");
+     
+       containers = document.querySelectorAll('.centeredtext');
+       containers.forEach(container => {
+           container.style.width="83%";
+       });
+       const header = document.getElementById("siteheader-content");
+       const drop = document.getElementById("dropdiv");
+
+       if(header && drop) { 
+           header.classList.add('no-transition');
+           header.style.opacity = "0";
+           header.style.pointerEvents = 'none';
+           void header.offsetHeight; 
+           header.classList.remove('no-transition');
+           drop.style.opacity = "1";
+           drop.style.pointerEvents = 'auto'; 
+       }
+
+       const path = window.location.pathname;
+       if (path === "/" || path === "/index.html") {
+           const wcenteredtext = document.getElementById("wcenteredtext");
+           if (wcenteredtext) { // Add check
+               wcenteredtext.style.flexDirection = "column";
+           }
+       }
+      
+  }
+
+
+   if (window.location.pathname.endsWith("schedule.html")){ //
+      console.log("On schedule page, creating calendar.");
+      createCalendar(); 
+   }
+
+
+  const menuToggleButton = document.getElementById("menu-toggle");
+  const dropdownMenu = document.getElementById("dropdown-menu");
+
+  if (menuToggleButton && dropdownMenu) {
+     
+      function toggleMenu() {
+
+          menuToggleButton.classList.toggle("open");
+          dropdownMenu.classList.toggle("is-visible");
+      }
+
+      menuToggleButton.addEventListener('click', toggleMenu);
+
+  } else {
+      
+  }
 
   
-        if (path === "/" || path === "/index.html") {
-          document.getElementById("wcenteredtext").style.flexDirection = "column";
-        }
-        updateUI(auth.currentUser);
-    }
+}); 
 
-    if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "schedule.html"){
- 
-        createCalendar();
-    }
-    
-    renderEventColumns();
-    
-});
 
 window.addEventListener("resize", function(){
     console.log("hi");
@@ -225,20 +254,9 @@ function checkWrap(onload) {
 
     }
   }
-  document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("menu-toggle");
-    const menu = document.getElementById("dropdown-menu");
 
-    toggle.addEventListener("click", () => {
-      toggle.classList.toggle("open");
 
-      if (menu.style.display === "flex") {
-        menu.style.display = "none";
-      } else {
-        menu.style.display = "flex";
-      }
-    });
-  });
+  
   
 if (window.location.href.substring(window.location.href.lastIndexOf('/') + 1) == "contact.html"){
     document.getElementById("myform").addEventListener("submit", function (e) {
@@ -748,7 +766,4 @@ function closeEventDetails() {
   }
   
   
-  
-        
-    
   
